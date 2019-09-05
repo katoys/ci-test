@@ -1,4 +1,5 @@
 version: 2
+
 jobs:
   build:
     docker:
@@ -10,12 +11,21 @@ jobs:
       - image: circleci/node:4.8.2
     steps:
       - run: echo "This step is test"
-  approve:
-    type: approval
   deploy:
-    requires:
-      - approve
     docker:
       - image: circleci/node:4.8.2
     steps:
       - run: echo "This step is deploy"
+
+
+workflows:
+  version: 2
+  test-workflow:
+    jobs:
+      build:
+      test:
+        requires: build
+      hold:
+        type: approval
+      deploy:
+        requires: hold
