@@ -1,8 +1,34 @@
 version: 2
+
 jobs:
   build:
-    docker: # use the docker executor type; machine and macos executors are also supported
-      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
+    docker:
+      - image: busybox:latest
     steps:
-      - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
+      - run: echo "This step is build"
+  test:
+    docker:
+      - image: busybox:latest
+    steps:
+      - run: echo "This step is test"
+  deploy:
+    docker:
+      - image: busybox:latest
+    steps:
+      - run: echo "This step is deploy"
+
+workflows:
+  version: 2
+  test-workflow:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - test
+      - deploy:
+          requires:
+            - hold
