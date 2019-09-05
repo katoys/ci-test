@@ -3,17 +3,17 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:4.8.2
+      - image: busybox:latest
     steps:
       - run: echo "This step is build"
   test:
     docker:
-      - image: circleci/node:4.8.2
+      - image: busybox:latest
     steps:
       - run: echo "This step is test"
   deploy:
     docker:
-      - image: circleci/node:4.8.2
+      - image: busybox:latest
     steps:
       - run: echo "This step is deploy"
 
@@ -21,14 +21,14 @@ workflows:
   version: 2
   test-workflow:
     jobs:
-      build:
-      test:
+      - build
+      - test:
         requires:
           - build
-      hold:
+      - hold:
         type: approval
         requires:
           - test
-      deploy:
+      - deploy:
         requires:
           - hold
