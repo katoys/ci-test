@@ -17,15 +17,18 @@ jobs:
     steps:
       - run: echo "This step is deploy"
 
-
 workflows:
   version: 2
   test-workflow:
     jobs:
       build:
       test:
-        requires: build
+        requires:
+          - build
       hold:
         type: approval
+        requires:
+          - test
       deploy:
-        requires: hold
+        requires:
+          - hold
