@@ -29,7 +29,7 @@ workflows:
           type: approval
           requires:
             - test
-          filter:
+          filters:
             tags:
               only: /^.*/
             branches:
