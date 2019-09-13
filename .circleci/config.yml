@@ -24,20 +24,20 @@ workflows:
       - build:
           filters:
             tags:
-              only: /^.*/
+              only: /.*/
       - test:
           requires:
             - build
           filters:
             tags:
-              only: /^.*/
+              only: /.*/
       - hold:
           type: approval
           requires:
             - test
           filters:
             tags:
-              only: /^.*/
+              only: /.*/
             branches:
               ignore: /.*/
       - deploy:
