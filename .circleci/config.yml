@@ -22,9 +22,15 @@ workflows:
   test-workflow:
     jobs:
       - build
+          filters:
+            tags:
+              only: /^.*/
       - test:
           requires:
             - build
+          filters:
+            tags:
+              only: /^.*/
       - hold:
           type: approval
           requires:
@@ -37,3 +43,6 @@ workflows:
       - deploy:
           requires:
             - hold
+          filters:
+            tags:
+              only: /^.*/
