@@ -12,11 +12,6 @@ jobs:
     steps:
       - run: echo "This step is test"
   deploy:
-    filter:
-      tags:
-        only: /^.*/
-      branches:
-        ignore: /.*/
     docker:
       - image: busybox:latest
     steps:
@@ -34,6 +29,11 @@ workflows:
           type: approval
           requires:
             - test
+          filter:
+            tags:
+              only: /^.*/
+            branches:
+              ignore: /.*/
       - deploy:
           requires:
             - hold
