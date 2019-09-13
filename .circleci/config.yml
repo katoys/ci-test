@@ -21,19 +21,28 @@ workflows:
   version: 2
   test-workflow:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /.*/
       - test:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
       - hold:
           type: approval
           requires:
             - test
           filters:
             tags:
-              only: /^.*/
+              only: /.*/
             branches:
               ignore: /.*/
       - deploy:
           requires:
             - hold
+          filters:
+            tags:
+              only: /^.*/
