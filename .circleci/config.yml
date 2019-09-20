@@ -5,7 +5,6 @@ jobs:
     docker:
       - image: ubuntu:16.04
     steps:
-      - run: echo "This step is build"
       - run:
           name: "build artifact"
           command: |
@@ -22,7 +21,6 @@ jobs:
     docker:
       - image: ubuntu:16.04
     steps:
-      - run: echo "This step is deploy"
       - attach_workspace:
           at: /tmp/workspace
       - run:
