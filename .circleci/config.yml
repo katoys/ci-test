@@ -16,6 +16,8 @@ jobs:
             echo "this is artifact 1. by $CIRCLE_TAG" > memo1.txt
             echo "this is artifact 2. by $CIRCLE_TAG" > memo2.txt
             zip artifact.zip memo1.txt memo2.txt
+            mkdir /tmp/workspace
+            cp artifact.zip /tmp/workspace
       - store_artifacts:
           path: ./artifact.zip
       - persist_to_workspace:
