@@ -43,6 +43,9 @@ workflows:
   test-workflow:
     jobs:
       - build:
+          filters:
+            tags:
+              only: /.*/
       - deploy:
           requires:
             - build
