@@ -19,7 +19,7 @@ jobs:
             mkdir /tmp/workspace
             cp artifact.zip /tmp/workspace
       - store_artifacts:
-          path: ./artifact.zip
+          path: /tmp/workspace/artifact.zip
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
