@@ -15,7 +15,7 @@ jobs:
       - store_artifacts:
           path: ./artifact.zip
       - persist_to_workspace:
-          root: /tmp/artifacts
+          root: /tmp/workspace
           paths:
             - artifact.zip
   deploy:
@@ -24,7 +24,7 @@ jobs:
     steps:
       - run: echo "This step is deploy"
       - attach_workspace:
-        at: /tmp/artifacts
+          at: /tmp/workspace
       - run:
           name: "install tools."
           command: |
@@ -37,7 +37,7 @@ jobs:
             curl -s \
               -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \
               -H "Content-Type: application/zip" \
-              --data-binary @/tmp/artifacts/artifact.zip \
+              --data-binary @/tmp/workspace/artifact.zip \
               https://uploads.github.com/repos/katoys/ci-test/releases/${GITHUB_RELEASE_ID}/assets?name=artifact.zip | jq
 
 workflows:
