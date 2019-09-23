@@ -32,7 +32,8 @@ jobs:
       - run:
           name: "install packages."
           command: |
-            apt-get update & install -y curl jq awscli
+            apt-get update
+            apt-get install -y curl jq awscli
       - attach_workspace:
           at: /tmp/workspace
       - run:
