@@ -10,8 +10,9 @@ jobs:
           command: |
             apt-get update
             apt-get install -y zip
+      - checkout
       - run:
-          name: "build artifact"
+          name: "build artifact."
           command: |
             echo "this is artifact 1. by $CIRCLE_TAG" > memo1.txt
             echo "this is artifact 2. by $CIRCLE_TAG" > memo2.txt
