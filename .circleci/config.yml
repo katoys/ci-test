@@ -3,19 +3,48 @@ version: 2
 jobs:
   build:
     docker:
-      - image: busybox:latest
+      - image: ubuntu:16.04
     steps:
-      - run: echo "This step is build"
-  test:
-    docker:
-      - image: busybox:latest
-    steps:
-      - run: echo "This step is test"
+      - run:
+          name: "install tools."
+          command: |
+            apt-get update
+            apt-get install -y zip awscli
+      - checkout
+      - run:
+          name: "build artifact."
+          command: |
+            echo "this is artifact 1. by $CIRCLE_TAG" > memo1.txt
+            echo "this is artifact 2. by $CIRCLE_TAG" > memo2.txt
+            zip artifact.zip memo1.txt memo2.txt
+            mkdir /tmp/workspace
+            cp artifact.zip /tmp/workspace
+      - store_artifacts:
+          path: /tmp/workspace/artifact.zip
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - artifact.zip
   deploy:
     docker:
-      - image: busybox:latest
+      - image: ubuntu:16.04
     steps:
-      - run: echo "This step is deploy"
+      - run:
+          name: "install tools."
+          command: |
+            apt-get update
+            apt-get install -y curl jq awscli
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          name: "deploy to GitHub Release."
+          command: |
+            GITHUB_RELEASE_ID=`curl -s https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@api.github.com/repos/katoys/ci-test/releases/tags/${CIRCLE_TAG} | jq '.["id"]'`
+            curl -s \
+              -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \
+              -H "Content-Type: application/zip" \
+              --data-binary @/tmp/workspace/artifact.zip \
+              https://uploads.github.com/repos/katoys/ci-test/releases/${GITHUB_RELEASE_ID}/assets?name=artifact.zip | jq
 
 workflows:
   version: 2
@@ -25,24 +54,11 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test:
+      - deploy:
           requires:
             - build
           filters:
             tags:
               only: /.*/
-      - hold:
-          type: approval
-          requires:
-            - test
-          filters:
-            tags:
-              only: /.*/
             branches:
               ignore: /.*/
-      - deploy:
-          requires:
-            - hold
-          filters:
-            tags:
-              only: /^.*/
