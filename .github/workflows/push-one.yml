@@ -1,0 +1,22 @@
+name: build one
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'one/**'
+
+permissions:
+  contents: read
+
+jobs:
+
+  build-api:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Echo
+        run: echo 'one (1)'
