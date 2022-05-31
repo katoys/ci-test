@@ -1,0 +1,22 @@
+name: build three
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'three/**'
+
+permissions:
+  contents: read
+
+jobs:
+
+  build-api:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Echo
+        run: echo 'one (3)'
