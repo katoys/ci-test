@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - '**'
-    # paths:
-    #   - 'one/**'
+    paths:
+      - 'one/**'
 
 permissions:
   contents: read
